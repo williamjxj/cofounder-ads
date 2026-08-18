@@ -1,0 +1,8 @@
+platforms:
+  x:
+    cadence: daily
+    enabled: true
+  reddit:
+    cadence: weekly
+    weekday: 0
+    enabled: true
