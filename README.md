@@ -39,7 +39,15 @@ Skip a queued draft without posting:
 python3 -m engine skip --platform x
 ```
 
-`published` and `skip` update the **last `queued` row** for that platform in `ledger.csv`. They do not post anything.
+`published` and `skip` update the **last `queued` row** for that platform in the
+ledger (`ads_ledger` in Supabase, or `ledger.csv` offline). They do not post anything.
+
+> **Storage (2026-08-24):** when `SUPABASE_URL` + `SUPABASE_SECRET_KEY` are set
+> (see `.env.example`), the ledger and CRM rows live in Supabase tables
+> **`ads_ledger`** / **`ads_crm`** via the REST API — no CSV writes. Without
+> them the engine falls back to `ledger.csv` / `crm.csv` (offline use and the
+> test suite). Table DDL is in `migrations/supabase.sql`; the CLI loads `.env`
+> automatically, so nothing else changes.
 
 ## Cadence ([calendar.yml](calendar.yml))
 
@@ -63,7 +71,7 @@ Disable a channel with `enabled: false`. Daily refill (optional cron):
 | `brief.md` `cta_url` | Appended to every draft. `REPLACE_ME` triggers a digest warning. |
 | `calendar.yml` | Which platforms are due that day |
 | `platforms/x.md` `max_chars` | X length cap (default 280) |
-| `ledger.csv` prior `text` / Reddit `sub` | Near-duplicate skip and subreddit rotation |
+| Ledger prior `text` / Reddit `sub` | Near-duplicate skip and subreddit rotation |
 
 Front matter usage in `brief.md`:
 
@@ -87,8 +95,9 @@ X copy rotates angles `ask` / `proof` / `split` / `filter`. Reddit rotates `r/co
 - `engine/` - `tick`, `published`, `skip`, `reply`
 - [calendar.yml](calendar.yml)
 - `queue/YYYY-MM-DD/` - `x.md`, `reddit.md` (Mondays), `APPROVE.md`
-- `ledger.csv` - date, platform, status, angle, sub, chars, path, url, text
-- `crm.csv` - date, platform, from_handle, note, url
+- `ads_ledger` (Supabase) or `ledger.csv` - date, platform, status, angle, sub, chars, path, url, text
+- `ads_crm` (Supabase) or `crm.csv` - date, platform, from_handle, note, url
+- `migrations/supabase.sql` - DDL for the Supabase tables
 - [public/index.html](public/index.html) - landing; [public/index.md](public/index.md) is the same copy in markdown
 
 ## Verify

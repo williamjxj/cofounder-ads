@@ -4,6 +4,8 @@ import csv
 from datetime import date
 from pathlib import Path
 
+from engine import supabase_store
+
 
 LEDGER_FIELDS = (
     "date",
@@ -36,6 +38,8 @@ def is_placeholder_url(url: str) -> bool:
 
 
 def ensure_csv(path: Path, fields: tuple[str, ...]) -> None:
+    if supabase_store.enabled():
+        return
     if path.exists():
         return
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -44,6 +48,9 @@ def ensure_csv(path: Path, fields: tuple[str, ...]) -> None:
 
 
 def append_row(path: Path, fields: tuple[str, ...], row: dict[str, str]) -> None:
+    if supabase_store.enabled():
+        supabase_store.insert_row(path, {k: row.get(k, "") for k in fields})
+        return
     ensure_csv(path, fields)
     with path.open("a", encoding="utf-8", newline="") as fh:
         csv.DictWriter(fh, fieldnames=fields).writerow(
@@ -52,6 +59,8 @@ def append_row(path: Path, fields: tuple[str, ...], row: dict[str, str]) -> None
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
+    if supabase_store.enabled():
+        return supabase_store.fetch_rows(path)
     if not path.exists():
         return []
     with path.open(encoding="utf-8", newline="") as fh:
@@ -80,6 +89,15 @@ def update_last_status(
     status: str,
     url: str = "",
 ) -> bool:
+    if supabase_store.enabled():
+        row_id = supabase_store.find_last_queued(path, platform)
+        if row_id is None:
+            return False
+        fields = {"status": status}
+        if url:
+            fields["url"] = url
+        supabase_store.update_row(path, row_id, fields)
+        return True
     rows = read_rows(path)
     for row in reversed(rows):
         if row.get("platform") == platform and row.get("status") == "queued":

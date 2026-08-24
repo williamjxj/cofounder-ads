@@ -4,6 +4,7 @@ import argparse
 from datetime import date
 from pathlib import Path
 
+from engine import supabase_store
 from engine.tick import log_reply, mark_published, mark_skipped, run_tick
 
 
@@ -38,6 +39,9 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
     root: Path = args.root.resolve()
+    # CLI always reads the project .env so ledger/crm go to Supabase when
+    # configured; library imports (and tests) never auto-load it.
+    supabase_store.load_env_file(root / ".env")
 
     if args.cmd == "tick":
         on_date = date.fromisoformat(args.date) if args.date else date.today()
@@ -55,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if ok else 1
     if args.cmd == "reply":
         log_reply(root, args.platform, args.from_handle, args.note, args.url)
-        print("Logged reply in crm.csv")
+        print("Logged reply (crm).")
         return 0
     return 1
 
