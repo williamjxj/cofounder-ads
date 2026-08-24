@@ -92,11 +92,22 @@ def generate_reddit(
     previous_subs: list[str],
     on_date: date,
 ) -> dict[str, Any]:
-    cta = str(brief.get("cta_url") or "").strip()
+    cta = _reddit_cta(brief)
     sub = _next_sub(previous_subs)
     title = REDDIT_TITLES[on_date.toordinal() % len(REDDIT_TITLES)]
     body = REDDIT_BODIES[sub].format(cta=cta).strip()
     return {"sub": sub, "title": title, "body": body}
+
+
+def _reddit_cta(brief: dict[str, Any]) -> str:
+    """Reddit supports markdown link text — use cta_label when provided."""
+    cta = str(brief.get("cta_url") or "").strip()
+    if not cta:
+        return ""
+    label = str(brief.get("cta_label") or "").strip()
+    if label:
+        return f"[{label}]({cta})"
+    return cta
 
 
 def _next_sub(previous_subs: list[str]) -> str:

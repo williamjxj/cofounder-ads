@@ -10,6 +10,7 @@ from engine.generate import generate_reddit, generate_x
 from engine.store import (
     CRM_FIELDS,
     LEDGER_FIELDS,
+    is_placeholder_url,
     append_row,
     ensure_csv,
     previous_subs,
@@ -43,9 +44,10 @@ def run_tick(root: Path, on_date: date | None = None) -> dict[str, Any]:
                 max_chars=int(adapter.get("max_chars") or 280),
             )
             rel = Path("queue") / on_date.isoformat() / "x.md"
+            x_handle = str(brief.get("x_handle") or "").strip()
             write_queue_file(
                 root / rel,
-                _x_markdown(on_date, post),
+                _x_markdown(on_date, post, x_handle),
             )
             append_row(
                 ledger_path,
@@ -105,6 +107,22 @@ def run_tick(root: Path, on_date: date | None = None) -> dict[str, Any]:
 
 
 def mark_published(root: Path, platform: str, url: str) -> bool:
+    """Mark the last queued draft as published — but refuse to do so until
+    both the post URL and the brief's cta_url are real (no placeholders).
+    This guard exists because an earlier tick marked a post published with a
+    placeholder URL while cta_url was still REPLACE_ME."""
+    if is_placeholder_url(url):
+        raise ValueError(
+            "Refusing to mark published with a placeholder URL. "
+            "Pass the real post URL (e.g. https://x.com/USER/status/ID)."
+        )
+    brief = load_brief(root / "brief.md")
+    cta = str(brief.get("cta_url") or "").strip()
+    if is_placeholder_url(cta):
+        raise ValueError(
+            "brief.md cta_url is not a real link yet (empty or placeholder). "
+            "Set a real landing/calendar link before marking anything published."
+        )
     return update_last_status(root / "ledger.csv", platform, "published", url=url)
 
 
@@ -127,7 +145,8 @@ def log_reply(root: Path, platform: str, from_handle: str, note: str, url: str =
     )
 
 
-def _x_markdown(on_date: date, post: dict[str, Any]) -> str:
+def _x_markdown(on_date: date, post: dict[str, Any], x_handle: str = "") -> str:
+    handle_hint = f" (posting as @{x_handle})" if x_handle else ""
     return (
         f"# X draft — {on_date.isoformat()}\n\n"
         f"Angle: {post['angle']}\n"
@@ -136,7 +155,7 @@ def _x_markdown(on_date: date, post: dict[str, Any]) -> str:
         f"{post['text']}\n\n"
         f"## How to publish\n\n"
         f"1. Copy the Post block above.\n"
-        f"2. Paste at https://x.com/compose\n"
+        f"2. Paste at https://x.com/compose{handle_hint}\n"
         f"3. Then: `python3 -m engine published --platform x --url YOUR_STATUS_URL`\n"
     )
 

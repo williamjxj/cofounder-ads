@@ -24,6 +24,12 @@ class PublishedAndCrmTest(unittest.TestCase):
 
     def test_published_updates_queued_row(self):
         run_tick(self.tmp, on_date=date(2026, 8, 18))
+        brief_path = self.tmp / "brief.md"
+        text = brief_path.read_text(encoding="utf-8")
+        brief_path.write_text(
+            text.replace("REPLACE_ME", "https://cal.com/william/20min"),
+            encoding="utf-8",
+        )
         ok = mark_published(self.tmp, "x", "https://x.com/w/status/1")
         self.assertTrue(ok)
         rows = read_rows(self.tmp / "ledger.csv")
@@ -37,6 +43,44 @@ class PublishedAndCrmTest(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["from_handle"], "@alex")
         self.assertEqual(rows[0]["platform"], "x")
+
+
+class PublishGuardTest(unittest.TestCase):
+    """mark_published must refuse placeholder URLs and unset cta_urls —
+    this prevents the fake-published ledger row that happened on 2026-08-18."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        for name in ("brief.md", "calendar.yml"):
+            shutil.copy(ROOT / name, self.tmp / name)
+        shutil.copytree(ROOT / "platforms", self.tmp / "platforms")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp)
+
+    def _write_brief_cta(self, cta: str):
+        path = self.tmp / "brief.md"
+        text = path.read_text(encoding="utf-8")
+        path.write_text(text.replace("REPLACE_ME", cta), encoding="utf-8")
+
+    def test_published_refuses_placeholder_url(self):
+        run_tick(self.tmp, on_date=date(2026, 8, 18))
+        with self.assertRaises(ValueError):
+            mark_published(self.tmp, "x", "https://x.com/YOU/status/ID")
+
+    def test_published_refuses_when_cta_is_placeholder(self):
+        run_tick(self.tmp, on_date=date(2026, 8, 18))
+        with self.assertRaises(ValueError):
+            mark_published(self.tmp, "x", "https://x.com/real/status/1")
+
+    def test_published_allowed_with_real_cta_and_url(self):
+        self._write_brief_cta("https://cal.com/william/20min")
+        run_tick(self.tmp, on_date=date(2026, 8, 18))
+        ok = mark_published(self.tmp, "x", "https://x.com/real/status/1")
+        self.assertTrue(ok)
+        rows = read_rows(self.tmp / "ledger.csv")
+        x_rows = [r for r in rows if r["platform"] == "x"]
+        self.assertEqual(x_rows[-1]["status"], "published")
 
 
 if __name__ == "__main__":

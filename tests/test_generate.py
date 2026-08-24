@@ -48,6 +48,20 @@ class GenerateRedditTest(unittest.TestCase):
         )
         self.assertNotEqual(post["sub"], "cofounder")
 
+    def test_reddit_uses_cta_label_as_markdown_link(self):
+        brief = _sample_brief()
+        brief["cta_url"] = "https://cal.com/william/20min"
+        brief["cta_label"] = "20-minute fit call"
+        post = generate_reddit(brief, previous_subs=[], on_date=date(2026, 8, 17))
+        self.assertIn("[20-minute fit call](https://cal.com/william/20min)", post["body"])
+
+    def test_reddit_falls_back_to_raw_url_without_label(self):
+        brief = _sample_brief()
+        brief["cta_url"] = "https://cal.com/william/20min"
+        brief.pop("cta_label", None)
+        post = generate_reddit(brief, previous_subs=[], on_date=date(2026, 8, 17))
+        self.assertIn("https://cal.com/william/20min", post["body"])
+
 
 class TickTest(unittest.TestCase):
     def setUp(self):
@@ -75,6 +89,18 @@ class TickTest(unittest.TestCase):
         ledger = (self.tmp / "ledger.csv").read_text(encoding="utf-8")
         self.assertIn("queued", ledger)
         self.assertIn(",x,", ledger)
+
+    def test_x_markdown_includes_handle_when_set(self):
+        from engine.tick import run_tick
+
+        brief_path = self.tmp / "brief.md"
+        text = brief_path.read_text(encoding="utf-8")
+        brief_path.write_text(
+            text.replace('x_handle: ""', 'x_handle: "wj"'), encoding="utf-8"
+        )
+        run_tick(self.tmp, on_date=date(2026, 8, 18))
+        x_path = self.tmp / "queue" / "2026-08-18" / "x.md"
+        self.assertIn("posting as @wj", x_path.read_text(encoding="utf-8"))
 
     def test_tick_on_monday_queues_x_and_reddit(self):
         from engine.tick import run_tick

@@ -65,7 +65,18 @@ Disable a channel with `enabled: false`. Daily refill (optional cron):
 | `platforms/x.md` `max_chars` | X length cap (default 280) |
 | `ledger.csv` prior `text` / Reddit `sub` | Near-duplicate skip and subreddit rotation |
 
-Front matter `cta_label`, `author_name`, and `x_handle` in `brief.md` are documentation for you; the generator does not interpolate them yet.
+Front matter usage in `brief.md`:
+
+- `cta_url` — appended to every draft. `REPLACE_ME` triggers a digest warning.
+- `cta_label` — used as the markdown link text on Reddit drafts (X gets the
+  raw URL, since X posts have no link text).
+- `x_handle` — shown in the X publish instructions when set.
+- `author_name` — documentation for you; not interpolated yet.
+
+> **Updated 2026-08-23:** the engine now **refuses** `engine published` until
+> both the post URL and `cta_url` are real (no `REPLACE_ME` / placeholder
+> URLs). The fake `https://x.com/YOU/status/ID` ledger row from 2026-08-18 was
+> corrected back to `queued`, and a stale duplicate queued row was removed.
 
 X copy rotates angles `ask` / `proof` / `split` / `filter`. Reddit rotates `r/cofounder` → `r/startups` → `r/indiehackers`.
 

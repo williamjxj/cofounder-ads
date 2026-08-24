@@ -19,6 +19,21 @@ LEDGER_FIELDS = (
 
 CRM_FIELDS = ("date", "platform", "from_handle", "note", "url")
 
+# Markers that indicate a URL was never replaced with a real post link.
+# The engine refuses to mark a post as published while any of these appear.
+PLACEHOLDER_URL_MARKERS = (
+    "replace_me",
+    "example.com",
+    "you/status",
+    "your-status-url",
+    "your_post_url",
+)
+
+
+def is_placeholder_url(url: str) -> bool:
+    low = (url or "").lower()
+    return not low or any(marker in low for marker in PLACEHOLDER_URL_MARKERS)
+
 
 def ensure_csv(path: Path, fields: tuple[str, ...]) -> None:
     if path.exists():
