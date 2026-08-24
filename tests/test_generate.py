@@ -55,6 +55,12 @@ class GenerateRedditTest(unittest.TestCase):
         post = generate_reddit(brief, previous_subs=[], on_date=date(2026, 8, 17))
         self.assertIn("[20-minute fit call](https://cal.com/william/20min)", post["body"])
 
+    def test_reddit_signs_off_with_author_name(self):
+        brief = _sample_brief()
+        brief["author_name"] = "William"
+        post = generate_reddit(brief, previous_subs=[], on_date=date(2026, 8, 17))
+        self.assertTrue(post["body"].strip().endswith("— William"))
+
     def test_reddit_falls_back_to_raw_url_without_label(self):
         brief = _sample_brief()
         brief["cta_url"] = "https://cal.com/william/20min"

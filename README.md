@@ -64,6 +64,12 @@ Disable a channel with `enabled: false`. Daily refill (optional cron):
 
 `scripts/tick.sh` forwards extra args to `python3 -m engine tick`.
 
+> **2026-08-24:** a launchd agent now runs the daily 09:00 tick automatically
+> (label `com.williamj.ads-tick`). Install/remove with
+> `scripts/install-launchd.sh` / `UNINSTALL=1 scripts/install-launchd.sh`.
+> The pre-Supabase drafts from 2026-08-17/18 were marked `skipped` and moved
+> to `queue/archive/`.
+
 ## What the engine reads
 
 | Input | Used for |
@@ -79,7 +85,7 @@ Front matter usage in `brief.md`:
 - `cta_label` — used as the markdown link text on Reddit drafts (X gets the
   raw URL, since X posts have no link text).
 - `x_handle` — shown in the X publish instructions when set.
-- `author_name` — documentation for you; not interpolated yet.
+- `author_name` — used as a sign-off ("— William") at the end of Reddit drafts.
 
 > **Updated 2026-08-23:** the engine now **refuses** `engine published` until
 > both the post URL and `cta_url` are real (no `REPLACE_ME` / placeholder

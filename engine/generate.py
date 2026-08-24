@@ -96,6 +96,9 @@ def generate_reddit(
     sub = _next_sub(previous_subs)
     title = REDDIT_TITLES[on_date.toordinal() % len(REDDIT_TITLES)]
     body = REDDIT_BODIES[sub].format(cta=cta).strip()
+    author = str(brief.get("author_name") or "").strip()
+    if author:
+        body = f"{body}\n\n— {author}"
     return {"sub": sub, "title": title, "body": body}
 
 

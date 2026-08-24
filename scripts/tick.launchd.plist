@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<!--
+  Daily 09:00 generate-and-queue tick for the ads engine (launchd equivalent
+  of the documented crontab). Nothing auto-publishes — this only queues drafts.
+  Install: scripts/install-launchd.sh
+-->
+<dict>
+  <key>Label</key>
+  <string>com.williamj.ads-tick</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>/Users/william.jiang/my-business/ads/scripts/tick.sh</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/william.jiang/my-business/ads</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>9</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/Users/william.jiang/my-business/ads/queue/tick.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/william.jiang/my-business/ads/queue/tick.log</string>
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>
