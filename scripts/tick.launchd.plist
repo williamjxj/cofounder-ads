@@ -12,10 +12,10 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/sh</string>
-    <string>/Users/william.jiang/my-business/ads/scripts/tick.sh</string>
+    <string>/Users/william.jiang/my-business/cofounder-ads/scripts/tick.sh</string>
   </array>
   <key>WorkingDirectory</key>
-  <string>/Users/william.jiang/my-business/ads</string>
+  <string>/Users/william.jiang/my-business/cofounder-ads</string>
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>
@@ -29,9 +29,9 @@
     <integer>0</integer>
   </dict>
   <key>StandardOutPath</key>
-  <string>/Users/william.jiang/my-business/ads/queue/tick.log</string>
+  <string>/Users/william.jiang/my-business/cofounder-ads/queue/tick.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/william.jiang/my-business/ads/queue/tick.log</string>
+  <string>/Users/william.jiang/my-business/cofounder-ads/queue/tick.log</string>
   <key>RunAtLoad</key>
   <false/>
 </dict>

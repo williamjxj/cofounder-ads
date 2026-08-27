@@ -16,7 +16,7 @@ You ship AI applications 0-1. You want a business co-founder who brings projects
 ```bash
 python3 -m engine tick
 python3 -m engine tick --date 2026-08-18
-python3 -m engine tick --root /path/to/ads
+python3 -m engine tick --root /path/to/cofounder-ads
 ```
 
 3. Open `queue/YYYY-MM-DD/APPROVE.md`. For X, copy the **Post** block from `x.md` and paste at https://x.com/compose.
@@ -59,7 +59,7 @@ ledger (`ads_ledger` in Supabase, or `ledger.csv` offline). They do not post any
 Disable a channel with `enabled: false`. Daily refill (optional cron):
 
 ```bash
-0 9 * * * /full/path/to/ads/scripts/tick.sh
+0 9 * * * /full/path/to/cofounder-ads/scripts/tick.sh
 ```
 
 `scripts/tick.sh` forwards extra args to `python3 -m engine tick`.
