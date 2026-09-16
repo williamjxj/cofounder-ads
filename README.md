@@ -4,6 +4,35 @@ Generate-and-queue drafts for a business co-founder search. **Nothing auto-publi
 
 Needs **Python 3** (stdlib only). See [docs/cursor_resources.md](docs/cursor_resources.md) for what you do not need. How the ticker works: [docs/cursor_loop.md](docs/cursor_loop.md).
 
+> 中文版：[README.zh.md](README.zh.md)
+
+> **Status (2026-09-15):** the engine runs daily and queues drafts on schedule,
+> but `brief.md` `cta_url` is still `REPLACE_ME`, so the publish guard blocks
+> every post — 31 ledger rows, all `queued`, zero `published`. A real link is
+> the single blocker. See [docs/cursor_loop.md](docs/cursor_loop.md#known-gaps-verified-2026-09-15).
+
+<!-- screenshots -->
+## UI
+
+A local read-only dashboard wraps the CLI. It lives in the sibling `platform`
+project (`../platform/apps/ads/server.mjs`, registered as the `ads` app on
+port 4901, bound to `127.0.0.1`) and shows the recent queue, the latest ledger
+rows, and a button to trigger a tick.
+
+| Dashboard (queue + ledger) | Landing page |
+|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Landing page](screenshots/landing.png) |
+
+```bash
+cd ../platform/apps/ads
+node server.mjs
+# dashboard: http://127.0.0.1:4901    landing: http://127.0.0.1:4901/landing
+```
+
+Or start it with the rest of the platform: `cd ../platform && npm start`.
+The dashboard only displays state and queues drafts — **publishing stays manual.**
+<!-- /screenshots -->
+
 ## Message
 
 You ship AI applications 0-1. You want a business co-founder who brings projects in. Equity-first; vest/cliff detail is on [public/index.html](public/index.html), not in the tweet.
@@ -16,7 +45,7 @@ You ship AI applications 0-1. You want a business co-founder who brings projects
 ```bash
 python3 -m engine tick
 python3 -m engine tick --date 2026-08-18
-python3 -m engine tick --root /path/to/cofounder-ads
+python3 -m engine --root /path/to/cofounder-ads tick
 ```
 
 3. Open `queue/YYYY-MM-DD/APPROVE.md`. For X, copy the **Post** block from `x.md` and paste at https://x.com/compose.

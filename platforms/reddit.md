@@ -33,6 +33,7 @@ Do **not** use r/entrepreneur, r/forhire, or “opportunity” classified subs f
 
 - One post per week from this adapter.
 - New wording every time. Pasting last week’s body will get removed.
+- **Known gap:** the generator has exactly one body per sub, so a given sub gets the same text every third week. Rewrite the body yourself before submitting; do not trust the rotation for freshness.
 - No identical cross-post. If you posted r/cofounder this week, wait for the next tick for a different sub.
 - Engage if people comment. Drive-by ads get banned.
 - Legal/equity detail: one line + link to the landing page. Do not paste the full vest/cliff brief into Reddit.
