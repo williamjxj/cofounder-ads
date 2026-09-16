@@ -1,11 +1,11 @@
-# X draft — 2026-08-18
+# X draft — 2026-09-07
 
 Angle: split
-Chars: 123 / 280
+Chars: 118 / 280
 
 ## Post
 
-Role split: you bring projects and close. I turn them into shipped AI apps. Equity co-founder, not a contractor. REPLACE_ME
+You own the customer and the close. I own scope, build, ship. AI 0-1. Looking for that business co-founder. REPLACE_ME
 
 ## How to publish
 

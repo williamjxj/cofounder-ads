@@ -1,11 +1,11 @@
 # X draft — 2026-08-24
 
-Angle: ask
-Chars: 127 / 280
+Angle: split
+Chars: 118 / 280
 
 ## Post
 
-Technical founder here. I land AI products 0-1. Need a business co-founder with real deal flow, not another builder. REPLACE_ME
+You own the customer and the close. I own scope, build, ship. AI 0-1. Looking for that business co-founder. REPLACE_ME
 
 ## How to publish
 

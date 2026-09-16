@@ -1,11 +1,11 @@
 # X draft — 2026-08-18
 
-Angle: split
-Chars: 123 / 280
+Angle: filter
+Chars: 109 / 280
 
 ## Post
 
-Role split: you bring projects and close. I turn them into shipped AI apps. Equity co-founder, not a contractor. REPLACE_ME
+Filter: you can intro a real buyer in 30 days. I can ship the product. Business co-founder search. REPLACE_ME
 
 ## How to publish
 

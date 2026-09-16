@@ -1,4 +1,4 @@
-# Reddit draft — 2026-08-24
+# Reddit draft — 2026-09-14
 
 Subreddit: r/indiehackers
 Read `platforms/reddit.md` before submitting.
