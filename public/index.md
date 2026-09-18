@@ -5,4 +5,6 @@ You have the buyer. I land the working application. Paid, scoped delivery is the
 - [Book a 20-minute fit call](https://cal.com/bestitconsultingca/fit-call)
 - [Partner inquiry](https://cal.com/bestitconsultingca/fit-call)
 
-Hosted at https://williamjxj.github.io/cofounder-ads/ (same copy as `index.html`).
+More proof: [LinkedIn](https://www.linkedin.com/in/william-jiang-226a7616/) · [GitHub](https://github.com/williamjxj)
+
+Repo and drafts: https://github.com/williamjxj/cofounder-ads — hosted at https://williamjxj.github.io/cofounder-ads/ (same copy as `index.html`).
