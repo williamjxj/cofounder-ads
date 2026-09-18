@@ -58,4 +58,4 @@ Equity only on the partner track: co-founder status from day one of a written 4-
 
 ## CTA
 
-Every draft includes `cta_url` (the landing page). Inbound is GitHub issues until a calendar link is set.
+Every draft includes `cta_url` (the landing page). Inbound is the Cal.com fit call behind the landing buttons; `cta_url` stays on the landing so a stranger reads the offer before booking.

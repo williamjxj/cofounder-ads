@@ -19,7 +19,7 @@
 - [ ] Set `x_handle` in `brief.md` if you have one
 - [ ] Paste today’s `queue/YYYY-MM-DD/x.md` Post block to X
 - [ ] `python3 -m engine published --platform x --url <status url>`
-- [ ] When you have Cal.com, replace landing buttons and `cta_url`
+- [x] Landing buttons → Cal.com fit call (`cta_url` stays on the landing)
 
 ## Weekly loop
 
