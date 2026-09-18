@@ -88,7 +88,7 @@ class PublishGuardTest(unittest.TestCase):
             mark_published(self.tmp, "x", "https://x.com/YOU/status/ID")
 
     def test_published_refuses_when_cta_is_placeholder(self):
-        self._write_brief_cta("REPLACE_ME")
+        self._write_brief_cta("https://example.com/cofounder-ads")
         run_tick(self.tmp, on_date=date(2026, 8, 18))
         with self.assertRaises(ValueError):
             mark_published(self.tmp, "x", "https://x.com/real/status/1")

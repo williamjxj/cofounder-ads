@@ -116,9 +116,7 @@ def _check_platform(platform: str) -> None:
 
 def _warnings(root: Path, brief: dict[str, Any], ledger_path: Path) -> str:
     parts: list[str] = []
-    if str(brief.get("cta_url") or "") in ("", "REPLACE_ME") or is_placeholder_url(
-        str(brief.get("cta_url") or "")
-    ):
+    if is_placeholder_url(str(brief.get("cta_url") or "")):
         parts.append(
             "cta_url is still a placeholder. Do not mark posts published until it is a real link."
         )

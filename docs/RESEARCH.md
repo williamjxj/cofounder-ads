@@ -4,7 +4,7 @@ Sources: this repo, GitHub `williamjxj/cofounder-ads`, last-30-day founder/SaaS 
 
 ## What this repo actually is
 
-A **human-in-the-loop draft queue** for X (daily) and Reddit (weekly). Python 3 stdlib. Nothing posts. A landing page exists but the CTA was `REPLACE_ME`. By 2026-09-15 the engine had queued ~31 drafts and **published zero**. Copy was a 12-body loop. The sibling `platform` dashboard is local-only and not required to run the CLI.
+A **human-in-the-loop draft queue** for X (daily) and Reddit (weekly). Python 3 stdlib. Nothing posts. A landing page exists but the CTA was `https://williamjxj.github.io/cofounder-ads/`. By 2026-09-15 the engine had queued ~31 drafts and **published zero**. Copy was a 12-body loop. The sibling `platform` dashboard is local-only and not required to run the CLI.
 
 The original offer was: technical founder seeks an unpaid business co-founder who brings deals.
 

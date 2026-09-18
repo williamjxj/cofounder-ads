@@ -44,9 +44,9 @@ brief.md + calendar.yml + platforms/*.md + ledger
 | Dead queue invisible | Streak warning + `engine status` |
 | `URLError` traceback | `RuntimeError` with a clear message |
 | Dashboard only in sibling repo | `python3 -m engine serve` |
-| CTA `REPLACE_ME` | GitHub Pages URL |
+| CTA placeholder token | Real GitHub Pages URL |
 
-Still operator-owned: enable Pages, paste to X, swap in a calendar when you have one. Supabase outages fall back to CSV with a stderr warning.
+Still operator-owned: keep Pages live, paste drafts manually (auto-post stays off), and move `cta_url` to a Cal link only when direct booking is wanted. Supabase outages fall back to CSV with a stderr warning.
 
 ## Tests
 
