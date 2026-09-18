@@ -42,4 +42,8 @@ python3 -m engine reply --platform x --from '@h' --note '...' # log CRM contact
 
 ## Tests
 
-Suite is unit tests only (temp dirs, no network). One test is knowingly stale and fails: `test_x_markdown_includes_handle_when_set` assumes `brief.md` has an empty `x_handle`, but it now holds `"bestitaica"` — the `replace` is a no-op. Confirm 36 pass + that 1 failure before declaring a green run.
+Suite is unit tests only (temp dirs, no network); 37 tests, all green: `python3 -m unittest discover -s tests -v`.
+
+## Landing / social preview
+
+`public/index.html` carries hand-written Open Graph + Twitter card tags; `public/og.png` (1200×630) is the card image, rendered from an HTML template with headless Chrome. X and LinkedIn build previews only from those tags — editing the page headline or description without updating the `og:` set leaves the next post with a stale or empty card.

@@ -1,3 +1,4 @@
+import re
 import tempfile
 import unittest
 from datetime import date
@@ -138,7 +139,7 @@ class TickTest(unittest.TestCase):
         brief_path = self.tmp / "brief.md"
         text = brief_path.read_text(encoding="utf-8")
         brief_path.write_text(
-            text.replace('x_handle: ""', 'x_handle: "wj"'), encoding="utf-8"
+            re.sub(r'x_handle: "[^"]*"', 'x_handle: "wj"', text), encoding="utf-8"
         )
         run_tick(self.tmp, on_date=date(2026, 8, 18))
         x_path = self.tmp / "queue" / "2026-08-18" / "x.md"
