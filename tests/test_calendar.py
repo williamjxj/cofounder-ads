@@ -46,6 +46,18 @@ class DuePlatformsTest(unittest.TestCase):
         data = load_calendar(path)
         self.assertIn("x", data["platforms"])
         self.assertTrue(data["platforms"]["x"]["enabled"])
+        self.assertEqual(data["platforms"]["linkedin"]["weekday"], 3)
+
+    def test_linkedin_due_thursday_only(self):
+        calendar = {
+            "platforms": {
+                "linkedin": {"cadence": "weekly", "weekday": 3, "enabled": True},
+            }
+        }
+        thursday = date(2026, 8, 20)
+        friday = date(2026, 8, 21)
+        self.assertEqual(due_platforms(calendar, thursday), ["linkedin"])
+        self.assertEqual(due_platforms(calendar, friday), [])
 
 
 if __name__ == "__main__":

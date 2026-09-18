@@ -84,6 +84,11 @@ def _request(method: str, url: str, payload: dict | None = None) -> bytes:
         raise RuntimeError(
             f"Supabase {method} {url} failed: HTTP {exc.code} {exc.read()[:300]!r}"
         ) from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(
+            f"Supabase {method} {url} failed: network {exc.reason!r}. "
+            "Unset SUPABASE_URL / SUPABASE_SECRET_KEY to use CSV, or retry when online."
+        ) from exc
 
 
 def fetch_rows(path: Path) -> list[dict]:

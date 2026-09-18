@@ -10,6 +10,9 @@ sys.path.insert(0, str(ROOT))
 
 from engine.tick import log_reply, mark_published, run_tick
 from engine.store import read_rows
+from engine.status import collect_status
+
+PAGES = "https://williamjxj.github.io/cofounder-ads/"
 
 
 class PublishedAndCrmTest(unittest.TestCase):
@@ -27,7 +30,7 @@ class PublishedAndCrmTest(unittest.TestCase):
         brief_path = self.tmp / "brief.md"
         text = brief_path.read_text(encoding="utf-8")
         brief_path.write_text(
-            text.replace("REPLACE_ME", "https://cal.com/william/20min"),
+            text.replace(PAGES, "https://cal.com/william/20min"),
             encoding="utf-8",
         )
         ok = mark_published(self.tmp, "x", "https://x.com/w/status/1")
@@ -43,6 +46,22 @@ class PublishedAndCrmTest(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["from_handle"], "@alex")
         self.assertEqual(rows[0]["platform"], "x")
+
+
+class CsvFallbackTest(unittest.TestCase):
+    def test_read_rows_falls_back_when_supabase_raises(self):
+        from unittest.mock import patch
+
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(lambda: shutil.rmtree(tmp))
+        csv_path = tmp / "ledger.csv"
+        csv_path.write_text("date,platform,status,angle,sub,chars,path,url,text\n2026-01-01,x,queued,,,,,,hi\n", encoding="utf-8")
+        with patch("engine.store.supabase_store.enabled", return_value=True), patch(
+            "engine.store.supabase_store.fetch_rows",
+            side_effect=RuntimeError("network boom"),
+        ):
+            rows = read_rows(csv_path)
+        self.assertEqual(rows[0]["text"], "hi")
 
 
 class PublishGuardTest(unittest.TestCase):
@@ -61,7 +80,7 @@ class PublishGuardTest(unittest.TestCase):
     def _write_brief_cta(self, cta: str):
         path = self.tmp / "brief.md"
         text = path.read_text(encoding="utf-8")
-        path.write_text(text.replace("REPLACE_ME", cta), encoding="utf-8")
+        path.write_text(text.replace(PAGES, cta), encoding="utf-8")
 
     def test_published_refuses_placeholder_url(self):
         run_tick(self.tmp, on_date=date(2026, 8, 18))
@@ -69,9 +88,14 @@ class PublishGuardTest(unittest.TestCase):
             mark_published(self.tmp, "x", "https://x.com/YOU/status/ID")
 
     def test_published_refuses_when_cta_is_placeholder(self):
+        self._write_brief_cta("REPLACE_ME")
         run_tick(self.tmp, on_date=date(2026, 8, 18))
         with self.assertRaises(ValueError):
             mark_published(self.tmp, "x", "https://x.com/real/status/1")
+
+    def test_status_reports_real_cta(self):
+        info = collect_status(ROOT, on_date=date(2026, 9, 17))
+        self.assertTrue(info["cta_ok"])
 
     def test_published_allowed_with_real_cta_and_url(self):
         self._write_brief_cta("https://cal.com/william/20min")

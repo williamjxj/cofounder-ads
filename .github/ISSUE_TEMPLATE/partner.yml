@@ -1,0 +1,23 @@
+name: Partner inquiry
+description: You already sell and want an equity conversation, not a free build.
+title: "[partner] "
+labels: ["partner"]
+body:
+  - type: textarea
+    id: proof
+    attributes:
+      label: What you closed in the last 90 days
+    validations:
+      required: true
+  - type: textarea
+    id: buyers
+    attributes:
+      label: Buyer type you can intro in 30 days
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: How to reach you
+    validations:
+      required: true

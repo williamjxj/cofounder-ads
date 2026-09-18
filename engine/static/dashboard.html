@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ads loop</title>
+  <style>
+    :root {
+      --bg: #0d1117; --panel: #161b22; --border: #2a3342;
+      --text: #e6edf3; --muted: #8b949e;
+      --green: #3fb950; --amber: #d29922; --red: #f85149; --blue: #58a6ff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, sans-serif; }
+    header { display: flex; gap: 12px; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(13,17,23,.95); }
+    h1 { font-size: 16px; margin: 0; }
+    .sub { font-size: 12px; color: var(--muted); }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .btn, select, input { font: inherit; font-size: 12px; color: var(--text); background: #1c2330; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; }
+    .btn { cursor: pointer; font-weight: 600; }
+    .btn:hover { border-color: var(--blue); color: var(--blue); }
+    main { padding: 16px; max-width: 1100px; margin: 0 auto; }
+    h2 { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); background: #1c2330; }
+    a { color: var(--blue); }
+    .st { display: inline-block; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .st.queued { color: var(--amber); }
+    .st.published { color: var(--green); }
+    .st.skipped { color: var(--muted); }
+    .warn { color: var(--amber); font-size: 13px; }
+    .ok { color: var(--green); }
+    .trunc { max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #msg { font-size: 12px; color: var(--muted); min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Hire / partner ads loop</h1>
+      <div class="sub" id="sub">loading…</div>
+    </div>
+    <div class="controls">
+      <input type="date" id="dateInput" aria-label="Tick date">
+      <button class="btn" id="runTick" type="button">Run tick</button>
+      <a class="btn" href="/landing" target="_blank">Landing</a>
+    </div>
+  </header>
+  <main>
+    <p id="cta"></p>
+    <p id="msg"></p>
+    <h2>Today</h2>
+    <p id="todayFiles"></p>
+    <h2>Mark last queued</h2>
+    <div class="controls" style="margin-bottom:16px">
+      <select id="platform">
+        <option value="x">x</option>
+        <option value="reddit">reddit</option>
+        <option value="linkedin">linkedin</option>
+      </select>
+      <input id="postUrl" placeholder="https://x.com/you/status/…" style="min-width:280px">
+      <button class="btn" id="markPub" type="button">Published</button>
+      <button class="btn" id="markSkip" type="button">Skip</button>
+    </div>
+    <h2>Log inbound</h2>
+    <div class="controls" style="margin-bottom:16px">
+      <input id="fromHandle" placeholder="@handle or email">
+      <input id="note" placeholder="note" style="min-width:220px">
+      <button class="btn" id="logReply" type="button">Save CRM</button>
+    </div>
+    <h2>Ledger</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Date</th><th>Platform</th><th>Status</th><th>Angle</th><th>Text</th><th>URL</th></tr></thead>
+        <tbody id="ledgerRows"></tbody>
+      </table>
+    </div>
+    <h2>CRM</h2>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Date</th><th>Platform</th><th>From</th><th>Note</th></tr></thead>
+        <tbody id="crmRows"></tbody>
+      </table>
+    </div>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    $("dateInput").value = new Date().toISOString().slice(0, 10);
+
+    async function load() {
+      const res = await fetch("/api/status");
+      const data = await res.json();
+      const ctaClass = data.cta_ok ? "ok" : "warn";
+      $("sub").textContent = `published ${data.published} · queued ${data.queued} · x streak ${data.x_unpublished_streak}`;
+      $("cta").innerHTML = `<span class="${ctaClass}">cta ${data.cta_ok ? "ok" : "blocked"}</span> ${data.cta_url || ""}`;
+      $("todayFiles").innerHTML = (data.today_files || []).map((f) =>
+        `<a href="/queue/${data.date}/${f}">${f}</a>`
+      ).join(" · ") || "(run tick)";
+      $("ledgerRows").innerHTML = (data.ledger || []).slice().reverse().map((r) =>
+        `<tr><td>${r.date||""}</td><td>${r.platform||""}</td><td><span class="st ${r.status}">${r.status}</span></td><td>${r.angle||r.sub||""}</td><td class="trunc" title="${(r.text||"").replaceAll('"','&quot;')}">${(r.text||"").slice(0,120)}</td><td>${r.url ? `<a href="${r.url}">link</a>` : ""}</td></tr>`
+      ).join("") || `<tr><td colspan="6">empty</td></tr>`;
+      $("crmRows").innerHTML = (data.crm || []).slice().reverse().map((r) =>
+        `<tr><td>${r.date||""}</td><td>${r.platform||""}</td><td>${r.from_handle||""}</td><td>${r.note||""}</td></tr>`
+      ).join("") || `<tr><td colspan="4">empty</td></tr>`;
+    }
+
+    async function post(url, payload) {
+      const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      $("msg").textContent = data.error || JSON.stringify(data);
+      await load();
+    }
+
+    $("runTick").onclick = () => post("/api/tick", { date: $("dateInput").value });
+    $("markPub").onclick = () => post("/api/published", { platform: $("platform").value, url: $("postUrl").value });
+    $("markSkip").onclick = () => post("/api/skip", { platform: $("platform").value });
+    $("logReply").onclick = () => post("/api/reply", { platform: $("platform").value, from_handle: $("fromHandle").value, note: $("note").value });
+    load().catch((err) => { $("msg").textContent = String(err); });
+  </script>
+</body>
+</html>

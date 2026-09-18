@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -49,8 +50,11 @@ def ensure_csv(path: Path, fields: tuple[str, ...]) -> None:
 
 def append_row(path: Path, fields: tuple[str, ...], row: dict[str, str]) -> None:
     if supabase_store.enabled():
-        supabase_store.insert_row(path, {k: row.get(k, "") for k in fields})
-        return
+        try:
+            supabase_store.insert_row(path, {k: row.get(k, "") for k in fields})
+            return
+        except RuntimeError as exc:
+            print(f"warning: supabase write failed, using CSV ({exc})", file=sys.stderr)
     ensure_csv(path, fields)
     with path.open("a", encoding="utf-8", newline="") as fh:
         csv.DictWriter(fh, fieldnames=fields).writerow(
@@ -60,7 +64,10 @@ def append_row(path: Path, fields: tuple[str, ...], row: dict[str, str]) -> None
 
 def read_rows(path: Path) -> list[dict[str, str]]:
     if supabase_store.enabled():
-        return supabase_store.fetch_rows(path)
+        try:
+            return supabase_store.fetch_rows(path)
+        except RuntimeError as exc:
+            print(f"warning: supabase read failed, using CSV ({exc})", file=sys.stderr)
     if not path.exists():
         return []
     with path.open(encoding="utf-8", newline="") as fh:
@@ -73,6 +80,35 @@ def previous_texts(path: Path, platform: str) -> list[str]:
         for row in read_rows(path)
         if row.get("platform") == platform and row.get("text")
     ]
+
+
+def has_row_for(path: Path, on_date: date | str, platform: str) -> bool:
+    day = on_date if isinstance(on_date, str) else on_date.isoformat()
+    return any(
+        row.get("date") == day and row.get("platform") == platform
+        for row in read_rows(path)
+    )
+
+
+def unpublished_streak(path: Path, platform: str) -> int:
+    """Queued rows after the last published row for this platform."""
+    n = 0
+    for row in reversed(read_rows(path)):
+        if row.get("platform") != platform:
+            continue
+        if row.get("status") == "published":
+            break
+        if row.get("status") == "queued":
+            n += 1
+    return n
+
+
+def status_counts(path: Path) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for row in read_rows(path):
+        key = f"{row.get('platform') or '?'}:{row.get('status') or '?'}"
+        counts[key] = counts.get(key, 0) + 1
+    return counts
 
 
 def previous_subs(path: Path) -> list[str]:
@@ -90,14 +126,17 @@ def update_last_status(
     url: str = "",
 ) -> bool:
     if supabase_store.enabled():
-        row_id = supabase_store.find_last_queued(path, platform)
-        if row_id is None:
-            return False
-        fields = {"status": status}
-        if url:
-            fields["url"] = url
-        supabase_store.update_row(path, row_id, fields)
-        return True
+        try:
+            row_id = supabase_store.find_last_queued(path, platform)
+            if row_id is None:
+                return False
+            fields = {"status": status}
+            if url:
+                fields["url"] = url
+            supabase_store.update_row(path, row_id, fields)
+            return True
+        except RuntimeError as exc:
+            print(f"warning: supabase update failed, using CSV ({exc})", file=sys.stderr)
     rows = read_rows(path)
     for row in reversed(rows):
         if row.get("platform") == platform and row.get("status") == "queued":

@@ -1,65 +1,61 @@
-# Partner-ad loop (X first, then Reddit)
+# Hire-first ads loop (X daily, Reddit Monday, LinkedIn Thursday)
 
-Generate-and-queue drafts for a business co-founder search. **Nothing auto-publishes.** A tick writes copy; you paste it to X (and Reddit when due).
+Generate-and-queue drafts so a technical founder can **get paid AI 0-1 work**, with a narrower business-partner ask. **Nothing auto-publishes.** A tick writes copy; you paste it.
 
-Needs **Python 3** (stdlib only). See [docs/cursor_resources.md](docs/cursor_resources.md) for what you do not need. How the ticker works: [docs/cursor_loop.md](docs/cursor_loop.md).
+Needs **Python 3** (stdlib only). How to use: [TODO.md](TODO.md). Why this shape: [docs/RESEARCH.md](docs/RESEARCH.md), [docs/ANALYSIS.md](docs/ANALYSIS.md), [docs/SPEC.md](docs/SPEC.md). Ticker internals: [docs/cursor_loop.md](docs/cursor_loop.md).
 
 > 中文版：[README.zh.md](README.zh.md)
 
-> **Status (2026-09-15):** the engine runs daily and queues drafts on schedule,
-> but `brief.md` `cta_url` is still `REPLACE_ME`, so the publish guard blocks
-> every post — 31 ledger rows, all `queued`, zero `published`. A real link is
-> the single blocker. See [docs/cursor_loop.md](docs/cursor_loop.md#known-gaps-verified-2026-09-15).
+> **Status (2026-09-17):** offer pivoted from “find a cofounder then maybe get paid” to **paid scoped builds first**. `cta_url` is the GitHub Pages landing. Enable Pages (Actions) so https://williamjxj.github.io/cofounder-ads/ is live, then paste today’s X draft.
 
 <!-- screenshots -->
 ## UI
 
-A local read-only dashboard wraps the CLI. It lives in the sibling `platform`
-project (`../platform/apps/ads/server.mjs`, registered as the `ads` app on
-port 4901, bound to `127.0.0.1`) and shows the recent queue, the latest ledger
-rows, and a button to trigger a tick.
+Two ways to see the queue:
+
+```bash
+python3 -m engine serve
+# dashboard: http://127.0.0.1:4901    landing: http://127.0.0.1:4901/landing
+```
+
+The optional sibling `platform` wrapper (`../platform/apps/ads`, port 4901) still works. **Publishing stays manual.**
 
 | Dashboard (queue + ledger) | Landing page |
 |---|---|
 | ![Dashboard](screenshots/dashboard.png) | ![Landing page](screenshots/landing.png) |
-
-```bash
-cd ../platform/apps/ads
-node server.mjs
-# dashboard: http://127.0.0.1:4901    landing: http://127.0.0.1:4901/landing
-```
-
-Or start it with the rest of the platform: `cd ../platform && npm start`.
-The dashboard only displays state and queues drafts — **publishing stays manual.**
 <!-- /screenshots -->
 
 ## Message
 
-You ship AI applications 0-1. You want a business co-founder who brings projects in. Equity-first; vest/cliff detail is on [public/index.html](public/index.html), not in the tweet.
+You ship AI applications 0-1 **for a fee**. You optionally want a business co-founder who already sells. Equity detail is on the landing page, not in the tweet.
 
-## Before the first post
+## Daily loop
 
-1. Set `cta_url` in [brief.md](brief.md) to a real page or calendar link (replace `REPLACE_ME`). Host `public/index.html` or point `cta_url` at your calendar. Until that is a real URL, ticks still run but `APPROVE.md` warns you not to publish.
-2. Fill the queue (from the repo root):
+1. Confirm Pages is live (or keep using `/landing` locally). Issue templates on the landing are the CTA until you add a calendar.
+2. Fill or refresh today’s queue:
 
 ```bash
 python3 -m engine tick
+python3 -m engine status
 python3 -m engine tick --date 2026-08-18
 python3 -m engine --root /path/to/cofounder-ads tick
 ```
 
-3. Open `queue/YYYY-MM-DD/APPROVE.md`. For X, copy the **Post** block from `x.md` and paste at https://x.com/compose.
+`tick` is **idempotent**: a second run for the same date+platform does not append another ledger row.
+
+3. Open `queue/YYYY-MM-DD/APPROVE.md`. Copy the **Post** block from `x.md` to https://x.com/compose.
 4. After it is live:
 
 ```bash
 python3 -m engine published --platform x --url 'https://x.com/YOU/status/ID'
 python3 -m engine published --platform reddit --url 'https://reddit.com/r/cofounder/comments/ID'
+python3 -m engine published --platform linkedin --url 'https://www.linkedin.com/feed/update/…'
 ```
 
 Log a reply:
 
 ```bash
-python3 -m engine reply --platform x --from '@someone' --note 'asked about equity' --url 'https://x.com/i/status/ID'
+python3 -m engine reply --platform x --from '@someone' --note 'asked about scope' --url 'https://x.com/i/status/ID'
 ```
 
 Skip a queued draft without posting:
@@ -68,72 +64,34 @@ Skip a queued draft without posting:
 python3 -m engine skip --platform x
 ```
 
-`published` and `skip` update the **last `queued` row** for that platform in the
-ledger (`ads_ledger` in Supabase, or `ledger.csv` offline). They do not post anything.
-
-> **Storage (2026-08-24):** when `SUPABASE_URL` + `SUPABASE_SECRET_KEY` are set
-> (see `.env.example`), the ledger and CRM rows live in Supabase tables
-> **`ads_ledger`** / **`ads_crm`** via the REST API — no CSV writes. Without
-> them the engine falls back to `ledger.csv` / `crm.csv` (offline use and the
-> test suite). Table DDL is in `migrations/supabase.sql`; the CLI loads `.env`
-> automatically, so nothing else changes.
-
 ## Cadence ([calendar.yml](calendar.yml))
 
 | Platform | Default | You do |
 |---|---|---|
-| X | `daily`, enabled | Approve and post |
-| Reddit | `weekly`, `weekday: 0` (Monday), one sub | Approve and post; read [platforms/reddit.md](platforms/reddit.md) first |
+| X | `daily` | Approve and post |
+| Reddit | `weekly`, Monday | Approve and post; read [platforms/reddit.md](platforms/reddit.md) |
+| LinkedIn | `weekly`, Thursday | Approve and post; read [platforms/linkedin.md](platforms/linkedin.md) |
 
-Disable a channel with `enabled: false`. Daily refill (optional cron):
-
-```bash
-0 9 * * * /full/path/to/cofounder-ads/scripts/tick.sh
-```
-
-`scripts/tick.sh` forwards extra args to `python3 -m engine tick`.
-
-> **2026-08-24:** a launchd agent now runs the daily 09:00 tick automatically
-> (label `com.williamj.ads-tick`). Install/remove with
-> `scripts/install-launchd.sh` / `UNINSTALL=1 scripts/install-launchd.sh`.
-> The pre-Supabase drafts from 2026-08-17/18 were marked `skipped` and moved
-> to `queue/archive/`.
+Daily refill (optional): `0 9 * * * /full/path/to/cofounder-ads/scripts/tick.sh`
 
 ## What the engine reads
 
 | Input | Used for |
 |---|---|
-| `brief.md` `cta_url` | Appended to every draft. `REPLACE_ME` triggers a digest warning. |
-| `calendar.yml` | Which platforms are due that day |
-| `platforms/x.md` `max_chars` | X length cap (default 280) |
-| Ledger prior `text` / Reddit `sub` | Near-duplicate skip and subreddit rotation |
+| `brief.md` `cta_url` | Appended to every draft |
+| `calendar.yml` | Which platforms are due |
+| `platforms/*.md` `max_chars` | Length caps |
+| Ledger `text` / Reddit `sub` | Near-duplicate skip, least-similar fallback, sub rotation |
 
-Front matter usage in `brief.md`:
-
-- `cta_url` — appended to every draft. `REPLACE_ME` triggers a digest warning.
-- `cta_label` — used as the markdown link text on Reddit drafts (X gets the
-  raw URL, since X posts have no link text).
-- `x_handle` — shown in the X publish instructions when set.
-- `author_name` — used as a sign-off ("— William") at the end of Reddit drafts.
-
-> **Updated 2026-08-23:** the engine now **refuses** `engine published` until
-> both the post URL and `cta_url` are real (no `REPLACE_ME` / placeholder
-> URLs). The fake `https://x.com/YOU/status/ID` ledger row from 2026-08-18 was
-> corrected back to `queued`, and a stale duplicate queued row was removed.
-
-X copy rotates angles `ask` / `proof` / `split` / `filter`. Reddit rotates `r/cofounder` → `r/startups` → `r/indiehackers`.
+X angles: `hire` / `proof` / `split` / `filter` / `partner`.
 
 ## Layout
 
-- [brief.md](brief.md) - offer, proof, angles (source of truth for the *message*)
-- [platforms/x.md](platforms/x.md), [platforms/reddit.md](platforms/reddit.md), [platforms/_template.md](platforms/_template.md)
-- `engine/` - `tick`, `published`, `skip`, `reply`
-- [calendar.yml](calendar.yml)
-- `queue/YYYY-MM-DD/` - `x.md`, `reddit.md` (Mondays), `APPROVE.md`
-- `ads_ledger` (Supabase) or `ledger.csv` - date, platform, status, angle, sub, chars, path, url, text
-- `ads_crm` (Supabase) or `crm.csv` - date, platform, from_handle, note, url
-- `migrations/supabase.sql` - DDL for the Supabase tables
-- [public/index.html](public/index.html) - landing; [public/index.md](public/index.md) is the same copy in markdown
+- [brief.md](brief.md) — offer (source of truth)
+- `engine/` — `tick`, `published`, `skip`, `reply`, `status`, `serve`
+- `queue/YYYY-MM-DD/` — drafts + `APPROVE.md`
+- `ads_ledger` / `ads_crm` (Supabase) or CSV offline
+- [public/index.html](public/index.html) — landing (GitHub Pages)
 
 ## Verify
 
@@ -143,4 +101,4 @@ python3 -m unittest discover -s tests -v
 
 ## What this is not
 
-No Craigslist bot. No identical paste across platforms. No auto-login posting. No extra Python packages.
+Not a Buffer competitor. No Craigslist bot. No auto-login posting. No extra Python packages.

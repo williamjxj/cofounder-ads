@@ -1,0 +1,23 @@
+name: Request a scoped AI build
+description: You have a buyer or a real brief. William ships 0-1.
+title: "[hire] "
+labels: ["hire"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What should exist
+      description: The user, the outcome, who pays.
+    validations:
+      required: true
+  - type: input
+    id: timing
+    attributes:
+      label: When do you need a first usable version
+  - type: input
+    id: contact
+    attributes:
+      label: How to reach you
+      placeholder: email or X handle
+    validations:
+      required: true

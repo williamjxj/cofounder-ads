@@ -20,17 +20,16 @@ language: en
 ## Rules
 
 - Stay at or under 280 characters unless you have Premium long-form and raise `max_chars`.
-- Do not thread the partner ask by default. One post, one CTA.
+- One post, one CTA (the landing page).
 - Do not lead with “business opportunity” or fundraising.
-- Vary the angle each day (ask / proof / split / filter). The tick tests candidates against prior ledger `text` and takes the first that is not a near-duplicate.
-- **Known gap:** the pool is 12 bodies (4 angles × 3), so from roughly the 13th tick every candidate matches and the generator reuses the first one. Read the draft before posting; if it is a repeat of a recent post, rewrite it by hand or skip the day.
-- Hashtags: at most one (`#cofounder` or none). Hashtag soup reads as spam.
-- Tag people only if you actually know them.
+- Default angles are hire / proof / split / filter. Partner is secondary (more likely on Mondays).
+- The tick prefers a non-duplicate body; if the pool is spent it takes the **least similar** candidate, not body 0.
+- Hashtags: at most one. Tag people only if you actually know them.
 
 ## Cadence
 
-Daily draft. Skip a day if you already posted and got a real conversation in progress — mark the ledger `skipped` rather than stacking unanswered asks.
+Daily draft. Skip a day if a real conversation is in progress — `skip` rather than stacking unanswered asks.
 
 ## Voice
 
-First person, specific, short. Sound like a builder looking for a partner, not an ad account.
+First person, specific, short. Builder for hire first; partner ask second.

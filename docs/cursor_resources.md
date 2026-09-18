@@ -2,9 +2,8 @@
 
 What this repo needs to run, and what it does not.
 
-> **Status (2026-09-15):** the engine runs daily and queues drafts, but nothing
-> has been published yet — `brief.md` `cta_url` is still `REPLACE_ME`, which the
-> publish guard rejects by design. See [cursor_loop.md](cursor_loop.md#known-gaps-verified-2026-09-15).
+> **Status (2026-09-17):** hire-primary loop. `cta_url` is the GitHub Pages
+> landing. Enable Pages, then post. See [cursor_loop.md](cursor_loop.md).
 
 | What | Needed? | Why |
 |---|---|---|
@@ -21,11 +20,12 @@ What this repo needs to run, and what it does not.
 
 ```bash
 python3 -m engine tick
+python3 -m engine status
+python3 -m engine serve
 python3 -m unittest discover -s tests -v
 
-# optional dashboard (Node, separate project)
+# optional older dashboard (Node, separate project)
 cd ../platform/apps/ads && node server.mjs
-# dashboard: http://127.0.0.1:4901    landing: http://127.0.0.1:4901/landing
 ```
 
 Optional daily queue fill: `scripts/tick.sh` (see README crontab example).

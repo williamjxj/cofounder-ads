@@ -55,5 +55,23 @@ class EnvLoadingTest(unittest.TestCase):
         self.assertTrue(store.enabled())
 
 
+class NetworkErrorTest(unittest.TestCase):
+    def tearDown(self):
+        for key in ("SUPABASE_URL", "SUPABASE_SECRET_KEY"):
+            os.environ.pop(key, None)
+
+    def test_urlerror_becomes_runtimeerror(self):
+        import urllib.error
+        from unittest.mock import patch
+
+        os.environ["SUPABASE_URL"] = "https://x.supabase.co"
+        os.environ["SUPABASE_SECRET_KEY"] = "secret"
+        err = urllib.error.URLError("dns")
+        with patch("engine.supabase_store.urllib.request.urlopen", side_effect=err):
+            with self.assertRaises(RuntimeError) as ctx:
+                store._request("GET", "https://x.supabase.co/rest/v1/ads_ledger")
+        self.assertIn("network", str(ctx.exception).lower())
+
+
 if __name__ == "__main__":
     unittest.main()

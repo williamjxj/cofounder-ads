@@ -1,53 +1,53 @@
 ---
-cta_url: REPLACE_ME
+cta_url: https://williamjxj.github.io/cofounder-ads/
 cta_label: 20-minute fit call
 author_name: William
 x_handle: ""
-# Generator currently uses cta_url only. Other keys are for you / future copy.
+primary_offer: hire
 ---
 
-# Partner brief
+# Partner / hire brief
 
-This file is the source of truth. Every queued X or Reddit draft is derived from it. Replace `cta_url` before the first live post.
+Source of truth for every queued draft. Public CTA is the GitHub Pages landing until a calendar URL replaces it.
 
 ## Offer (one line)
 
-I ship AI applications 0→1. I am looking for a business co-founder who already talks to buyers and will bring projects in. We share the company.
+I ship AI applications 0→1 on a scoped, paid brief. I also have a narrower seat for a business co-founder who already talks to buyers.
 
 ## Who I am
 
 - Strong at AI tech and landing a working application from zero.
-- Weak at business development and marketing — that is the seat I am hiring a co-founder for, not a contractor.
-- I already ship. I need distribution and deal flow, not another engineer.
+- Weak at top-of-funnel marketing — I do not pretend otherwise.
+- I already ship. Paid delivery is the default. Equity is earned, not promised on a tweet.
 
 ## Who I want
 
-- A business co-founder: pipeline, positioning, closing, owning the customer relationship.
-- People who already sell (consultants, agency operators, operators with a book of business) and want equity, not a freelance split.
-- Repeatable buyer types beat “anyone with a problem.”
+- **Hire (default):** operators, consultants, and teams with a buyer and a messy AI-shaped problem.
+- **Partner (filter):** people who already sell and want equity, not a freelance split. Repeatable buyer types beat “anyone with a problem.”
 
 ## Role split
 
-- **You:** bring projects, own the relationship, close.
-- **Me:** scope, build, ship, turn repeats into a product.
-- **Not this:** I do not want you to code. You do not want me to run your marketing while I wait.
+- **Hire:** you own the customer; I own scope, build, ship.
+- **Partner:** you bring projects and close; I turn repeats into a product we both own.
+- **Not this:** I do not want you to code. You do not want me to run your marketing while I wait. No free custom builds as a trial.
 
 ## Equity (detail lives on the landing page; keep socials short)
 
-Equity-first: co-founder status from day one. Written 4-year vest / 1-year cliff after a 90-day founder trial. No handshake 50%. No vested block of stock on day one. If there is no qualified buyer intro in 30 days, the trial ends and no shares move.
+Equity only on the partner track: co-founder status from day one of a written 4-year vest / 1-year cliff after a 90-day founder trial. No handshake 50%. If there is no qualified buyer intro in 30 days, the trial ends and no shares move. Paid work does not require equity.
 
 ## Proof (rotate these; do not dump the whole catalog)
 
 - Shipped a career-AI pipeline (job matching, resume, interview practice, partner marketplace) from idea to running apps.
 - Comfortable taking a messy client problem and landing a usable AI application in days or weeks, not months of architecture theater.
-- Building in public: the work is already there; what is missing is someone who can sell it.
+- Building in public: the work is already there; distribution and deal flow are what paid briefs and a partner are for.
 
 ## Angles (the generator picks one per tick)
 
-1. **Ask** — looking for a business co-founder with deal flow, not another builder.
-2. **Proof** — I already ship 0→1; I need someone who brings the projects.
+1. **Hire** — scoped AI 0-1 for people who already have a buyer.
+2. **Proof** — I already ship; take the next brief.
 3. **Split** — you own the customer; I own delivery.
-4. **Filter** — if you closed work in the last 90 days and want equity, talk.
+4. **Filter** — brief + buyer, or we are not a fit.
+5. **Partner** — equity if you already close; secondary, not every day.
 
 ## Do not say in ads
 
@@ -58,4 +58,4 @@ Equity-first: co-founder status from day one. Written 4-year vest / 1-year cliff
 
 ## CTA
 
-Every draft includes `cta_url`. Until that URL is a real landing page or calendar link, do not mark posts as published.
+Every draft includes `cta_url` (the landing page). Inbound is GitHub issues until a calendar link is set.

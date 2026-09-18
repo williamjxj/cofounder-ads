@@ -8,8 +8,10 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from engine.generate import generate_reddit, generate_x
+from engine.generate import ANGLES, X_BODIES, generate_linkedin, generate_reddit, generate_x
 from engine.brief import load_brief
+from engine.tick import run_tick
+from engine.store import read_rows
 
 
 def _sample_brief() -> dict:
@@ -23,13 +25,31 @@ class GenerateXTest(unittest.TestCase):
         self.assertLessEqual(len(post["text"]), 280)
         self.assertIn(brief["cta_url"], post["text"])
         self.assertNotIn("investment", post["text"].lower())
-        self.assertIn(post["angle"], ("ask", "proof", "split", "filter"))
+        self.assertIn(post["angle"], ANGLES)
 
     def test_x_post_avoids_near_duplicate_history(self):
         brief = _sample_brief()
         first = generate_x(brief, previous=[], on_date=date(2026, 8, 17))
         second = generate_x(brief, previous=[first["text"]], on_date=date(2026, 8, 18))
         self.assertNotEqual(first["text"], second["text"])
+
+    def test_x_bodies_fit_with_pages_cta(self):
+        brief = _sample_brief()
+        cta = brief["cta_url"]
+        for angle, bodies in X_BODIES.items():
+            for body in bodies:
+                text = f"{body} {cta}"
+                self.assertLessEqual(len(text), 280, f"{angle}: {len(text)} {body}")
+
+    def test_spent_pool_uses_least_similar_not_first_only(self):
+        brief = _sample_brief()
+        previous = []
+        seen = set()
+        for i in range(40):
+            post = generate_x(brief, previous=previous, on_date=date(2026, 1, 1 + (i % 28)))
+            previous.append(post["text"])
+            seen.add(post["text"])
+        self.assertGreater(len(seen), 8)
 
 
 class GenerateRedditTest(unittest.TestCase):
@@ -68,6 +88,26 @@ class GenerateRedditTest(unittest.TestCase):
         post = generate_reddit(brief, previous_subs=[], on_date=date(2026, 8, 17))
         self.assertIn("https://cal.com/william/20min", post["body"])
 
+    def test_reddit_varies_body_when_history_matches(self):
+        brief = _sample_brief()
+        first = generate_reddit(brief, previous_subs=[], on_date=date(2026, 8, 17))
+        second = generate_reddit(
+            brief,
+            previous_subs=["indiehackers", "cofounder"],
+            on_date=date(2026, 8, 17),
+            previous_texts=[first["title"] + "\n" + first["body"]],
+        )
+        self.assertEqual(second["sub"], "startups")
+
+
+class GenerateLinkedInTest(unittest.TestCase):
+    def test_linkedin_includes_cta_and_stays_bounded(self):
+        brief = _sample_brief()
+        post = generate_linkedin(brief, previous=[], on_date=date(2026, 8, 20))
+        self.assertIn(brief["cta_url"], post["text"])
+        self.assertLessEqual(post["chars"], 1300)
+        self.assertEqual(post["angle"], "hire")
+
 
 class TickTest(unittest.TestCase):
     def setUp(self):
@@ -82,8 +122,6 @@ class TickTest(unittest.TestCase):
         shutil.rmtree(self.tmp)
 
     def test_tick_on_tuesday_queues_x_only(self):
-        from engine.tick import run_tick
-
         result = run_tick(self.tmp, on_date=date(2026, 8, 18))
         self.assertEqual(result["platforms"], ["x"])
         x_path = self.tmp / "queue" / "2026-08-18" / "x.md"
@@ -97,8 +135,6 @@ class TickTest(unittest.TestCase):
         self.assertIn(",x,", ledger)
 
     def test_x_markdown_includes_handle_when_set(self):
-        from engine.tick import run_tick
-
         brief_path = self.tmp / "brief.md"
         text = brief_path.read_text(encoding="utf-8")
         brief_path.write_text(
@@ -109,11 +145,22 @@ class TickTest(unittest.TestCase):
         self.assertIn("posting as @wj", x_path.read_text(encoding="utf-8"))
 
     def test_tick_on_monday_queues_x_and_reddit(self):
-        from engine.tick import run_tick
-
         result = run_tick(self.tmp, on_date=date(2026, 8, 17))
         self.assertEqual(result["platforms"], ["x", "reddit"])
         self.assertTrue((self.tmp / "queue" / "2026-08-17" / "reddit.md").exists())
+
+    def test_tick_on_thursday_queues_x_and_linkedin(self):
+        result = run_tick(self.tmp, on_date=date(2026, 8, 20))
+        self.assertEqual(result["platforms"], ["x", "linkedin"])
+        self.assertTrue((self.tmp / "queue" / "2026-08-20" / "linkedin.md").exists())
+
+    def test_tick_is_idempotent_for_the_same_date(self):
+        run_tick(self.tmp, on_date=date(2026, 8, 18))
+        second = run_tick(self.tmp, on_date=date(2026, 8, 18))
+        self.assertEqual(second["platforms"], [])
+        self.assertEqual(second["skipped"], ["x"])
+        rows = [r for r in read_rows(self.tmp / "ledger.csv") if r["platform"] == "x"]
+        self.assertEqual(len(rows), 1)
 
 
 if __name__ == "__main__":

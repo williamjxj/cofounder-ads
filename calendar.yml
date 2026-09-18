@@ -6,3 +6,7 @@ platforms:
     cadence: weekly
     weekday: 0
     enabled: true
+  linkedin:
+    cadence: weekly
+    weekday: 3
+    enabled: true

@@ -3,51 +3,74 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Looking for a business co-founder</title>
+  <title>William — AI apps 0–1</title>
+  <meta name="description" content="Scoped AI application delivery. You own the customer. I ship. Optional business-partner seat if you already sell.">
   <style>
-    :root { color-scheme: light dark; }
-    body {
-      font-family: Georgia, "Times New Roman", serif;
-      max-width: 38rem;
-      margin: 2.5rem auto;
-      padding: 0 1.25rem 3rem;
-      line-height: 1.55;
+    :root { color-scheme: light dark; --fg: #111; --muted: #555; --bg: #fafafa; --card: #fff; --line: #ddd; --accent: #111; }
+    @media (prefers-color-scheme: dark) {
+      :root { --fg: #eee; --muted: #aaa; --bg: #0e0e0e; --card: #161616; --line: #333; --accent: #eee; }
     }
-    h1 { font-size: 1.7rem; line-height: 1.25; }
-    h2 { font-size: 1.1rem; margin-top: 1.8rem; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+      line-height: 1.55;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    .kicker { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.6rem; }
+    h1 { font-size: 1.85rem; line-height: 1.2; margin: 0 0 0.8rem; }
+    h2 { font-size: 1.05rem; margin-top: 2rem; }
+    .lede { font-size: 1.05rem; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.2rem 0 0.4rem; }
     .cta {
       display: inline-block;
-      margin-top: 0.5rem;
       padding: 0.7rem 1.1rem;
-      background: #111;
-      color: #fff;
+      background: var(--accent);
+      color: var(--bg);
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-weight: 600;
     }
-    .note { font-size: 0.9rem; opacity: 0.75; }
+    .cta.secondary { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+    .note { font-size: 0.9rem; color: var(--muted); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.1rem; margin: 1rem 0; }
     ul { padding-left: 1.2rem; }
+    code { font-size: 0.85em; }
   </style>
 </head>
 <body>
-  <h1>Looking for a business co-founder</h1>
-  <p>I build AI applications from zero to a working product. I am not looking for another engineer.</p>
-  <p>I am looking for a <strong>business co-founder</strong> who already talks to buyers and will bring projects in. You own the relationship and the close. I own scope, build, and shipping. Repeats of the same problem become a product we both own.</p>
+  <p class="kicker">AI applications · scoped delivery</p>
+  <h1>You have the buyer. I ship the AI app.</h1>
+  <p class="lede">I take messy, real problems and land a working AI application — days or weeks, written scope, you keep the customer relationship. This is paid 0–1 work. A business co-founder seat exists only for people who already sell.</p>
 
-  <h2>How we work together</h2>
+  <div class="cta-row">
+    <a class="cta" href="https://github.com/williamjxj/cofounder-ads/issues/new?template=hire.yml">Request a scoped build</a>
+    <a class="cta secondary" href="https://github.com/williamjxj/cofounder-ads/issues/new?template=partner.yml">Partner inquiry</a>
+  </div>
+  <p class="note">20-minute filter. No free custom builds. Replace these buttons with a calendar when you have one.</p>
+
+  <h2>How paid work works</h2>
   <ul>
-    <li>Co-founder from day one - not a freelance split.</li>
-    <li>90-day founder trial. A qualified buyer conversation in the first 30 days is the filter.</li>
-    <li>Written 4-year vest / 1-year cliff. No handshake 50%. No shares that stick if the trial produces nothing.</li>
+    <li>You own the account and the close.</li>
+    <li>I own scope, build, and shipping.</li>
+    <li>Repeats of the same problem can become a product — after the first app exists.</li>
   </ul>
 
-  <h2>What I have already shipped</h2>
-  <p>A career-AI pipeline (job matching, resume, interview practice) from idea to running apps. Proof that I can land 0-1. Not a catalog you are required to sell.</p>
+  <div class="card">
+    <strong>Proof, not a catalog.</strong>
+    <p>A career-AI pipeline (job matching, resume, interview practice) from idea to running apps. That is evidence I land 0–1. It is not a list you are required to resell.</p>
+  </div>
 
   <h2>Fit</h2>
-  <p>This is a fit if you closed work in the last 90 days and want to own a company with a builder who can ship. It is not a fit if you have ideas but no buyers, or if you want a free custom build as a trial.</p>
+  <p><strong>Yes:</strong> you can name the user, the outcome, and who pays.</p>
+  <p><strong>No:</strong> ideas with no buyer, handshake 50%, or a free trial build.</p>
 
-  <h2>Next step</h2>
-  <p><a class="cta" href="#replace-me">Book a 20-minute fit call</a></p>
-  <p class="note">Replace the button href and <code>cta_url</code> in <code>brief.md</code> with your calendar or contact link before you post.</p>
+  <h2>The partner seat (narrow)</h2>
+  <p>If you closed work in the last 90 days and want equity with a builder who ships: co-founder from day one of a written 4-year vest / 1-year cliff after a 90-day trial. Qualified buyer intro in 30 days or the trial ends and no shares move.</p>
+
+  <p class="note">Repo and drafts: <a href="https://github.com/williamjxj/cofounder-ads">github.com/williamjxj/cofounder-ads</a></p>
 </body>
 </html>
