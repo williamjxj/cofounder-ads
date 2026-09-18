@@ -6,7 +6,7 @@ Needs **Python 3** (stdlib only). How to use: [TODO.md](TODO.md). Why this shape
 
 > 中文版：[README.zh.md](README.zh.md)
 
-> **Status (2026-09-17):** offer pivoted from “find a cofounder then maybe get paid” to **paid scoped builds first**. `cta_url` is the GitHub Pages landing. Enable Pages (Actions) so https://williamjxj.github.io/cofounder-ads/ is live, then paste today’s X draft.
+> **Status (2026-09-18):** offer is **paid scoped 0-1 builds first**, with the partner ask as a narrow secondary filter. `cta_url` is the GitHub Pages landing, deployed from `public/` by [.github/workflows/pages.yml](.github/workflows/pages.yml) (Pages source: **GitHub Actions**). Both landing buttons book the Cal.com fit call, and `public/og.png` is the 1200×630 link-preview card. First X post is live — the loop is steady state, no setup left.
 
 <!-- screenshots -->
 ## UI
@@ -31,7 +31,7 @@ You ship AI applications 0-1 **for a fee**. You optionally want a business co-fo
 
 ## Daily loop
 
-1. Confirm Pages is live (or keep using `/landing` locally). Issue templates on the landing are the CTA until you add a calendar.
+1. Pages is already live, so there is no per-day setup. The landing is https://williamjxj.github.io/cofounder-ads/ (local preview: `http://127.0.0.1:4901/landing`).
 2. Fill or refresh today’s queue:
 
 ```bash
@@ -47,7 +47,7 @@ python3 -m engine --root /path/to/cofounder-ads tick
 4. After it is live:
 
 ```bash
-python3 -m engine published --platform x --url 'https://x.com/YOU/status/ID'
+python3 -m engine published --platform x --url 'https://x.com/bestitaica/status/ID'
 python3 -m engine published --platform reddit --url 'https://reddit.com/r/cofounder/comments/ID'
 python3 -m engine published --platform linkedin --url 'https://www.linkedin.com/feed/update/…'
 ```
@@ -79,8 +79,9 @@ Daily refill (optional): `0 9 * * * /full/path/to/cofounder-ads/scripts/tick.sh`
 | Input | Used for |
 |---|---|
 | `brief.md` `cta_url` | Appended to every draft |
+| `brief.md` `x_handle` | “posting as @handle” hint in `queue/YYYY-MM-DD/x.md` |
 | `calendar.yml` | Which platforms are due |
-| `platforms/*.md` `max_chars` | Length caps |
+| `platforms/*.md` `max_chars` / `cadence` | Length caps; weekly weekday |
 | Ledger `text` / Reddit `sub` | Near-duplicate skip, least-similar fallback, sub rotation |
 
 X angles: `hire` / `proof` / `split` / `filter` / `partner`.
@@ -91,7 +92,9 @@ X angles: `hire` / `proof` / `split` / `filter` / `partner`.
 - `engine/` — `tick`, `published`, `skip`, `reply`, `status`, `serve`
 - `queue/YYYY-MM-DD/` — drafts + `APPROVE.md`
 - `ads_ledger` / `ads_crm` (Supabase) or CSV offline
-- [public/index.html](public/index.html) — landing (GitHub Pages)
+- [public/index.html](public/index.html) — landing (GitHub Pages), with Open Graph / Twitter card tags
+- [public/og.png](public/og.png) — 1200×630 social card used by link previews
+- [AGENTS.md](AGENTS.md) — repo instructions for coding agents (commands, gotchas)
 
 ## Verify
 

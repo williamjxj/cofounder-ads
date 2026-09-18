@@ -11,7 +11,9 @@ Nothing auto-publishes to X, Reddit, or LinkedIn.
 1. **Hire (default):** fixed-scope AI 0-1. They own the customer; you ship.
 2. **Partner (filter):** equity after a 90-day trial; 30-day buyer-intro gate.
 
-Every draft appends `cta_url` (the Pages landing). Landing CTAs open GitHub issue templates (`hire` / `partner`) until a calendar URL is set.
+Every draft appends `cta_url` — the Pages landing at https://williamjxj.github.io/cofounder-ads/, deployed from `public/` by `.github/workflows/pages.yml` (Pages source: GitHub Actions). Both landing buttons now book the Cal.com fit call (`cal.com/bestitconsultingca/fit-call`); the `hire` / `partner` GitHub issue templates stay in `.github/ISSUE_TEMPLATE/` but the landing no longer links them.
+
+The landing carries hand-written Open Graph / Twitter card tags and a 1200×630 `public/og.png`, so a pasted link renders a title, description, and thumbnail instead of a bare URL.
 
 ## CLI (stdlib)
 

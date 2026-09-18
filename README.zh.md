@@ -6,7 +6,9 @@
 
 > English original: [README.md](README.md)
 
-> **当前状态（2026-09-17）：** 主offer 从「先找股东再赚钱」改成 **先接付费 scoped 项目**。`cta_url` 指向 GitHub Pages 落地页。在仓库 Settings 里打开 Pages（GitHub Actions），确认 https://williamjxj.github.io/cofounder-ads/ 可访问，然后把今天的 X 草稿贴出去。
+> **当前状态（2026-09-18）：** 主 offer 是 **先接付费 scoped 0-1 项目**，合伙人只是更窄的第二条漏斗。`cta_url` 指向 GitHub Pages 落地页：`.github/workflows/pages.yml` 从 `public/` 自动部署，Pages 来源已设为 **GitHub Actions**。落地页两个按钮都直接约 Cal.com fit call，`public/og.png` 是 1200×630 的分享卡片。第一条 X 已经发出去，现在进入日常节奏，没有一次性配置了。
+
+粘贴前先看一眼 X 的链接预览卡片：平台按 URL 缓存卡片，同一个 URL 可能仍然显示旧预览；必要时在 URL 后加 `?v=2` 强制重新抓取。
 
 ## 界面
 

@@ -5,9 +5,9 @@
 3. Generator + LinkedIn adapter + calendar.
 4. Idempotent tick, staleness warning, `status`, Supabase `URLError`.
 5. `engine serve` dashboard (product is self-contained).
-6. Tests for new behavior; keep 27 existing cases green (updated for real CTA).
+6. Tests for new behavior; keep the existing cases green (37 total).
 7. Verify: unittest, tick idempotency, serve `/landing`, `status` JSON-ish print.
-8. Operator: enable GitHub Pages, post today’s X draft, swap calendar when ready.
+8. Operator: Pages source → GitHub Actions ✅, landing buttons → Cal.com fit call ✅, first X post published ✅ (all done 2026-09-18).
 9. Loop: weekly `engine status`; rewrite bodies that start repeating; promote inbound in CRM.
 
-Execute order in this change-set is 2–7. 8–9 are production, not code.
+Items 2–7 are the code change-set. 8–9 are production, not code; only the weekly loop in 9 is still open.

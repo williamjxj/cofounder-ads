@@ -2,8 +2,10 @@
 
 What this repo needs to run, and what it does not.
 
-> **Status (2026-09-17):** hire-primary loop. `cta_url` is the GitHub Pages
-> landing. Enable Pages, then post. See [cursor_loop.md](cursor_loop.md).
+> **Status (2026-09-18):** hire-primary loop. `cta_url` is the GitHub Pages
+> landing, deployed from `public/` with the Pages source set to GitHub Actions,
+> and its buttons book the Cal.com fit call. Nothing left to enable — just
+> paste drafts. See [cursor_loop.md](cursor_loop.md).
 
 | What | Needed? | Why |
 |---|---|---|
@@ -14,7 +16,7 @@ What this repo needs to run, and what it does not.
 | .env / API keys | **Optional** | `SUPABASE_URL` + `SUPABASE_SECRET_KEY` when using Supabase storage; otherwise none |
 | X or Reddit API | **No** | You paste drafts by hand |
 | Node.js | **Optional** | Only for the dashboard wrapper in the sibling `platform` project (`../platform/apps/ads/server.mjs`, :4901). The landing page itself is plain HTML, and the engine never needs Node. |
-| Cloud hosting | **Optional** | Only if you put `public/index.html` on the web and set `cta_url` |
+| Cloud hosting | **Optional** | Only if you want the landing on the web. It already is: GitHub Pages serves `public/index.html` and `cta_url` points at it. The CLI never needs it. |
 
 ## Commands
 
@@ -35,6 +37,8 @@ Optional daily queue fill: `scripts/tick.sh` (see README crontab example).
 | What | Where | Type |
 |---|---|---|
 | Queued drafts | `queue/YYYY-MM-DD/` | Markdown |
+| Landing page | `public/index.html` | Static HTML (+ og/twitter card tags) |
+| Social card | `public/og.png` | 1200×630 PNG, rendered with headless Chrome |
 | Post history | Supabase `ads_ledger` (or `ledger.csv` offline) | PostgREST / CSV |
 | Inbound replies | Supabase `ads_crm` (or `crm.csv` offline) | PostgREST / CSV |
 | Offer copy | `brief.md` | Markdown + YAML front matter |

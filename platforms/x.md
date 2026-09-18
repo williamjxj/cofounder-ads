@@ -15,7 +15,7 @@ language: en
 3. Paste into https://x.com/compose.
 4. After it is live, run:
 
-   `python3 -m engine published --platform x --url https://x.com/YOUR_HANDLE/status/ID`
+   `python3 -m engine published --platform x --url https://x.com/bestitaica/status/ID`
 
 ## Rules
 
@@ -25,6 +25,7 @@ language: en
 - Default angles are hire / proof / split / filter. Partner is secondary (more likely on Mondays).
 - The tick prefers a non-duplicate body; if the pool is spent it takes the **least similar** candidate, not body 0.
 - Hashtags: at most one. Tag people only if you actually know them.
+- Check the link preview before posting. X caches cards per exact URL, so a URL that was already posted can keep showing an old card; adding a query string (e.g. `?v=2`) forces a fresh scrape. Same trap if the landing's `og:` tags changed.
 
 ## Cadence
 

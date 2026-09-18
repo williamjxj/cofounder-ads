@@ -47,3 +47,5 @@ Suite is unit tests only (temp dirs, no network); 37 tests, all green: `python3 
 ## Landing / social preview
 
 `public/index.html` carries hand-written Open Graph + Twitter card tags; `public/og.png` (1200×630) is the card image, rendered from an HTML template with headless Chrome. X and LinkedIn build previews only from those tags — editing the page headline or description without updating the `og:` set leaves the next post with a stale or empty card.
+
+Card caching is per exact URL: a URL that was posted before the tags existed keeps rendering its old preview (or none), so check the card in the composer before posting. Appending a query string (e.g. `?v=2`) is a new cache key and forces a fresh scrape.

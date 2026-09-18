@@ -16,14 +16,14 @@ Get paid for shipping AI applications 0-1. A business co-founder is optional lev
 
 - **Primary:** paid AI 0-1 builds. X daily. Operator will paste.
 - **Secondary:** business-partner ask, minority of angles, Reddit r/cofounder.
-- **CTA:** GitHub Pages `https://williamjxj.github.io/cofounder-ads/` until a calendar exists.
+- **CTA:** GitHub Pages landing `https://williamjxj.github.io/cofounder-ads/`, whose buttons book the Cal.com fit call (2026-09-18). `cta_url` deliberately stays on the landing so proof renders before the booking step.
 - **Not doing:** sell cofounder-ads as SaaS.
 
 ## Risks that remain (operator, not code)
 
-- Pages must be enabled on the GitHub repo (Actions).
+- Pages is live on the GitHub repo (Actions source, enabled 2026-09-18).
 - X account must actually post the queue.
-- Inbound currently lands on GitHub issues, not a calendar. Swap `cta_url` / landing buttons when Cal.com exists.
+- X caches link cards per exact URL, so a previously posted URL can keep rendering an old preview. Check the card in the composer before posting; a new query string forces a fresh scrape.
 - No fake pricing on the page. Scope on the call.
 
 ## Success metrics (evaluate weekly)
@@ -31,6 +31,6 @@ Get paid for shipping AI applications 0-1. A business co-founder is optional lev
 | Metric | Healthy |
 |---|---|
 | X published / queued (7d) | ≥ 5 / 7 |
-| Landing visits with a GitHub issue or CRM row | ≥ 1 serious inbound / 2 weeks |
+| Cal.com booking or CRM row from the landing | ≥ 1 serious inbound / 2 weeks |
 | Paid conversation | 1 scoped brief |
 | Partner trial | only after a qualified buyer intro |

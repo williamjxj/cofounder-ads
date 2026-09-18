@@ -8,7 +8,7 @@ primary_offer: hire
 
 # Partner / hire brief
 
-Source of truth for every queued draft. Public CTA is the GitHub Pages landing until a calendar URL replaces it.
+Source of truth for every queued draft. Public CTA is the GitHub Pages landing; its buttons book the Cal.com fit call.
 
 ## Offer (one line)
 
